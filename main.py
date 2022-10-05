@@ -49,7 +49,7 @@ def main() -> None:
 
     dbx = dropbox.Dropbox(config['DROPBOX_SECRET'])
 
-    for file in tqdm(os.listdir(config['IMAGES_FOLDER'])[0:5]):
+    for file in tqdm(os.listdir(config['IMAGES_FOLDER'])):
         if not os.path.isfile(os.path.join(config['IMAGES_FOLDER'], file)):
             continue
 
