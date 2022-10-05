@@ -49,7 +49,7 @@ def main() -> None:
 
     dbx = dropbox.Dropbox(config['DROPBOX_SECRET'])
 
-    for file in tqdm(os.listdir(config['IMAGES_FOLDER'])):
+    for file in tqdm(os.listdir(config['IMAGES_FOLDER'])[0:5]):
         if not os.path.isfile(os.path.join(config['IMAGES_FOLDER'], file)):
             continue
 
@@ -62,7 +62,7 @@ def main() -> None:
         url = replace_shared_link_to_download_link(url)
 
         # add to csv data
-        csv_data += f"{file},{url}\n"
+        csv_data += f"{url},{file}\n"
 
     if errors:
         logger.error("Unable to upload files: %s" % "\n".join(errors))
