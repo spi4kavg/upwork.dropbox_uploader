@@ -17,8 +17,9 @@
 ```bash
     pip install -r requirements.txt
 ```
-#### 3. Put your images into ./images folder
-#### 4. run script and wait
+#### 3. Create "images" directory in the root of project
+#### 4. Put your images into ./images folder
+#### 5. run script and wait
 ```bash
     python main.py
 ```
