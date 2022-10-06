@@ -47,22 +47,31 @@ def main() -> None:
 
     errors = []
 
-    dbx = dropbox.Dropbox(config['DROPBOX_SECRET'])
+    auth_flow = dropbox.DropboxOAuth2FlowNoRedirect(config['APP_KEY'], config['APP_SECRET'])
+    authorize_url = auth_flow.start()
 
-    for file in tqdm(os.listdir(config['IMAGES_FOLDER'])):
-        if not os.path.isfile(os.path.join(config['IMAGES_FOLDER'], file)):
-            continue
+    print("1. Go to: " + authorize_url)
+    print("2. Click \"Allow\" (you might have to log in first).")
+    print("3. Copy the authorization code.")
+    auth_code = input("Enter the authorization code here: ").strip()
+    oauth_result = auth_flow.finish(auth_code)
 
-        # upload file to dropbox
-        if (url := upload_file(dbx, file)) is None:
-            errors.append(file)
-            continue
+    with dropbox.Dropbox(oauth2_access_token=oauth_result.access_token) as dbx:
 
-        # fix link to direct
-        url = replace_shared_link_to_download_link(url)
+        for file in tqdm(os.listdir(config['IMAGES_FOLDER'])):
+            if not os.path.isfile(os.path.join(config['IMAGES_FOLDER'], file)):
+                continue
 
-        # add to csv data
-        csv_data += f"{url},{file}\n"
+            # upload file to dropbox
+            if (url := upload_file(dbx, file)) is None:
+                errors.append(file)
+                continue
+
+            # fix link to direct
+            url = replace_shared_link_to_download_link(url)
+
+            # add to csv data
+            csv_data += f"{url},{file}\n"
 
     if errors:
         logger.error("Unable to upload files: %s" % "\n".join(errors))

@@ -5,7 +5,7 @@
 #### 1. Go to https://www.dropbox.com/developers/apps?_tk=pilot_lp&_ad=topbar4&_camp=myapps and create your app
 #### 2. Go to permissions of your app and add files.content.write scope
 #### 3. Click button Generate token and copy it
-#### 4. Open app.env and fill DROPBOX_SECRET
+#### 4. Open app.env and fill API_KEY and API_SECRET
 
 ### installation
 
