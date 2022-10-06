@@ -43,7 +43,7 @@ def replace_shared_link_to_download_link(link: str) -> str:
 
 
 def main() -> None:
-    csv_data = ""
+    csv_data = "URL,Filename\n"
 
     errors = []
 
