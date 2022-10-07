@@ -47,7 +47,11 @@ def main() -> None:
 
     errors = []
 
-    auth_flow = dropbox.DropboxOAuth2FlowNoRedirect(config['APP_KEY'], config['APP_SECRET'])
+    auth_flow = dropbox.DropboxOAuth2FlowNoRedirect(
+        config['APP_KEY'],
+        consumer_secret=config['APP_SECRET'],
+        token_access_type='offline'
+    )
     authorize_url = auth_flow.start()
 
     print("1. Go to: " + authorize_url)
@@ -56,7 +60,13 @@ def main() -> None:
     auth_code = input("Enter the authorization code here: ").strip()
     oauth_result = auth_flow.finish(auth_code)
 
-    with dropbox.Dropbox(oauth2_access_token=oauth_result.access_token) as dbx:
+    with dropbox.Dropbox(
+        oauth2_access_token=oauth_result.access_token,
+        oauth2_access_token_expiration=oauth_result.expires_at,
+        oauth2_refresh_token=oauth_result.refresh_token,
+        app_key=config['APP_KEY'],
+        app_secret=config['APP_SECRET']
+    ) as dbx:
 
         for file in tqdm(os.listdir(config['IMAGES_FOLDER'])):
             if not os.path.isfile(os.path.join(config['IMAGES_FOLDER'], file)):
